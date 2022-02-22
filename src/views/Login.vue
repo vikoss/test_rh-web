@@ -30,7 +30,7 @@
       </h2>
       <input-base
         id="email"
-        v-model="credentials.username"
+        v-model="credentials.email"
         class="mb-3.5"
         label="Correo:"
         placeholder="Ingresa tu correo"
@@ -43,13 +43,13 @@
         placeholder="Ingresa tu contraseña"
         type="password"
       />
-      <p class="text-red text-base" v-show="error" >{{ error }}</p>
+      <p class="text-base text-red-900" v-show="error" >{{ error }}</p>
       <button-base
         class="max-w-xs mx-auto mt-16 sm:mr-0"
         :loading="loading"
         :disabled="disabled"
         label="Ingresar"
-        @click="login"
+        :click="login"
       />
     </section>
   </main>
@@ -58,6 +58,7 @@
 <script>
 import InputBase from '../components/InputBase.vue';
 import ButtonBase from '../components/ButtonBase.vue';
+import { authenticate, me } from '../api/auth';
 
 export default {
   name: 'LoginView',
@@ -72,13 +73,34 @@ export default {
         password: '',
       },
       loading: false,
-      disabled: false,
       error: '',
     };
   },
+  computed: {
+    disabled() {
+      return !(this.credentials.email && this.credentials.password);
+    },
+  },
   methods: {
-    login() {
-      console.log('hello');
+    async login() {
+      this.loading = true;
+      this.error = '';
+      try {
+        await authenticate(this.credentials);
+        const data = await me();
+        if (data.role === 'admin') {
+          this.$router.push({ name: 'Hire' });
+        } else {
+          this.$router.push({ name: 'Home' });
+        }
+      } catch (error) {
+        if (error.status === 401) {
+          this.error = 'Correo ó contraseña inválidos';
+        } else {
+          this.error = 'Por el momento los servios no estan dispobles';
+        }
+      }
+      this.loading = false;
     },
   },
 };
