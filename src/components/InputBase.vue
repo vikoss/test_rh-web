@@ -13,7 +13,7 @@
       :value="value"
       :autocomplete="autocomplete"
       :disabled="disabled"
-      @input="(event) => $emit('update', event.target.value)"
+      @input="({ target }) => $emit('update', type === 'text' ? target.value : `${target.checked}`)"
     >
   </label>
 </template>
