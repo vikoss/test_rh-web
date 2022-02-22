@@ -10,10 +10,10 @@
         text-black text-base font-medium mt-1 w-full focus:border-2 focus:shadow"
       :type="type"
       :placeholder="placeholder"
-      :value="modelValue"
+      :value="value"
       :autocomplete="autocomplete"
       :disabled="disabled"
-      @input="(event) => $emit('update:modelValue', event.target.value)"
+      @input="(event) => $emit('update', event.target.value)"
     >
   </label>
 </template>
@@ -38,7 +38,7 @@ export default {
       type: String,
       default: 'text',
     },
-    modelValue: {
+    value: {
       type: String,
       default: '',
     },
@@ -51,6 +51,10 @@ export default {
       default: false,
     },
   },
-  emits: ['update:modelValue'],
+  model: {
+    prop: 'value',
+    event: 'update',
+  },
+  // emits: ['update:value'],
 };
 </script>
