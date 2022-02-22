@@ -1,4 +1,4 @@
-import { post, get } from 'axios';
+import { post } from 'axios';
 
 const JWT = JSON.parse(localStorage.getItem('rh-jwt')).access_token;
 
@@ -8,10 +8,11 @@ const storeEmployee = (employee) => new Promise((resolve, reject) => {
   body.append('surname', employee.surname);
   body.append('dni', employee.dni);
   body.append('date_of_birth', employee.date_of_birth);
-  body.append('photo', employee.photo);
-  post('http://127.0.0.1:9009/api/employees', employee, {
+  body.append('photo_file', employee.photo_file);
+  post('http://127.0.0.1:9009/api/employees', body, {
     headers: {
       Authorization: `Bearer ${JWT}`,
+      'Content-Type': 'multipart/form-data',
     },
   })
     .then(({ data }) => {
@@ -21,7 +22,7 @@ const storeEmployee = (employee) => new Promise((resolve, reject) => {
 });
 
 const attachJobToEmployee = ({ employeeId, jobId }) => new Promise((resolve, reject) => {
-  get(`http://127.0.0.1:9009/api/employees${employeeId}/jobs`, jobId, {
+  post(`http://127.0.0.1:9009/api/employees/${employeeId}/jobs`, jobId, {
     headers: {
       Authorization: `Bearer ${JWT}`,
     },
