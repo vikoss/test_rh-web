@@ -33,13 +33,10 @@
           placeholder="Ingresa tu correo"
           type="date"
         />
-        <input-base
+        <input-file
           id="photo"
-          v-model="employee.photo"
+          @change="(file) => (employee.photo_file = file)"
           class="mb-3.5"
-          label="Foto:"
-          placeholder="Ingresa tu correo"
-          type="file"
         />
       </div>
       <div>
@@ -70,12 +67,10 @@
           v-model="job.is_boss"
           class="mb-3.5"
           label="Es jefe:"
-          placeholder="Ingresa tu correo"
+          type="checkbox"
         />
       </div>
     </div>
-    <p>{{ employee }}</p>
-    <p>{{ job }}</p>
      <button-base
       class="max-w-xs mx-auto mt-16"
       :loading="loading"
@@ -83,6 +78,7 @@
       label="Ingresar"
       :click="save"
     />
+    <modal :show="showModal" :user="user" />
   </main>
 </template>
 
@@ -90,8 +86,11 @@
 import InputBase from '../components/InputBase.vue';
 import HeaderBase from '../components/HeaderBase.vue';
 import ButtonBase from '../components/ButtonBase.vue';
+import InputFile from '../components/InputFile.vue';
+import Modal from '../components/Modal.vue';
 import { storeEmployee, attachJobToEmployee } from '../api/employee';
 import { storeJob } from '../api/jobs';
+import getUser from '../api/user';
 
 export default {
   name: 'HireView',
@@ -99,6 +98,8 @@ export default {
     InputBase,
     HeaderBase,
     ButtonBase,
+    InputFile,
+    Modal,
   },
   data() {
     return {
@@ -107,16 +108,18 @@ export default {
         surname: '',
         dni: '',
         date_of_birth: '',
-        photo: '',
+        photo_file: null,
       },
       job: {
         name: '',
         code: '',
         level: '',
-        is_boss: '',
+        is_boss: 'false',
       },
+      user: {},
       loading: false,
       error: '',
+      showModal: false,
     };
   },
   computed: {
@@ -126,7 +129,7 @@ export default {
         && this.employee.surname
         && this.employee.dni
         && this.employee.date_of_birth
-        && this.employee.photo
+        && this.employee.photo_file
         && this.job.name
         && this.job.code
         && this.job.level
@@ -139,6 +142,8 @@ export default {
       const employee = await storeEmployee(this.employee);
       const job = await storeJob(this.job);
       await attachJobToEmployee({ employeeId: employee.id, jobId: job.id });
+      this.user = await getUser(employee.user_id);
+      this.showModal = true;
       console.log('helooo');
     },
   },
