@@ -3,7 +3,9 @@
     <header-base />
     <div class="p-7 grid grid-cols-1 gap-8 sm:grid-cols-2">
       <div>
-        <h3>Ingresa los datos del trabajador</h3>
+        <h3 class="text-lg font-bold mb-4">
+          Ingresa los datos del trabajador
+        </h3>
         <input-base
           id="employee-name"
           v-model="employee.name"
@@ -35,12 +37,15 @@
         />
         <input-file
           id="photo"
+          label="Fotografia"
           @change="(file) => (employee.photo_file = file)"
-          class="mb-3.5"
+          style="margin-top: 2.5rem;"
         />
       </div>
       <div>
-        <h3>Ingresa los datos del puesto de trabajo que llevara acabo</h3>
+        <h3 class="text-lg font-bold mb-4">
+          Ingresa los datos del puesto de trabajo que llevara acabo
+        </h3>
         <input-base
           id="job-name"
           v-model="job.name"
@@ -90,7 +95,7 @@ import InputFile from '../components/InputFile.vue';
 import Modal from '../components/Modal.vue';
 import { storeEmployee, attachJobToEmployee } from '../api/employee';
 import { storeJob } from '../api/jobs';
-import getUser from '../api/user';
+import { getUser } from '../api/user';
 
 export default {
   name: 'HireView',
