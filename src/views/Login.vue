@@ -87,12 +87,8 @@ export default {
       this.error = '';
       try {
         await authenticate(this.credentials);
-        const data = await me();
-        if (data.role === 'admin') {
-          this.$router.push({ name: 'Hire' });
-        } else {
-          this.$router.push({ name: 'Home' });
-        }
+        await me();
+        this.$router.push({ name: 'Home' });
       } catch (error) {
         if (error.status === 401) {
           this.error = 'Correo ó contraseña inválidos';
