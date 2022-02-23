@@ -13,7 +13,8 @@
       :value="value"
       :autocomplete="autocomplete"
       :disabled="disabled"
-      @input="({ target }) => $emit('update', type === 'text' ? target.value : `${target.checked}`)"
+      @input="({ target }) => $emit('update', type === 'checkbox' ?
+        `${target.checked}` : target.value)"
     >
   </label>
 </template>
@@ -58,3 +59,19 @@ export default {
   // emits: ['update:value'],
 };
 </script>
+
+<style scoped>
+input:checked {
+  width: 44px;
+  display: block;
+  appearance: none;
+  background-color: #2563eb;
+  cursor: pointer;
+}
+input[type=checkbox]:not(checked) {
+  appearance: none;
+  width: 44px;
+  display: block;
+  cursor: pointer;
+}
+</style>
