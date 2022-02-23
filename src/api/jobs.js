@@ -1,11 +1,10 @@
 import { post, get } from 'axios';
-
-const JWT = JSON.parse(localStorage.getItem('rh-jwt')).access_token;
+import { JWT } from '../helpers/localStorage';
 
 const storeJob = (job) => new Promise((resolve, reject) => {
   post('http://127.0.0.1:9009/api/jobs', job, {
     headers: {
-      Authorization: `Bearer ${JWT}`,
+      Authorization: `Bearer ${JWT()}`,
     },
   })
     .then(({ data }) => {
@@ -17,7 +16,7 @@ const storeJob = (job) => new Promise((resolve, reject) => {
 const me = () => new Promise((resolve, reject) => {
   get('http://127.0.0.1:9009/api/auth/me', {
     headers: {
-      Authorization: `Bearer ${JWT}`,
+      Authorization: `Bearer ${JWT()}`,
     },
   })
     .then(({ data }) => {
