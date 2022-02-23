@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     isAdmin() {
-      return currentUser.role === 'admin';
+      return currentUser().role === 'admin';
     },
   },
   methods: {

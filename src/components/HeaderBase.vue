@@ -28,7 +28,7 @@ import { logout } from '../api/auth';
 export default {
   data() {
     return {
-      user: currentUser,
+      user: currentUser(),
       showLogOut: false,
     };
   },
